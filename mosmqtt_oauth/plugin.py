@@ -20,10 +20,10 @@ def user_acl_cache_key(token):
 
 
 def userDetails(token: str) -> dict:
-    EXTERNAL_AUTH_URL = os.environ['EXTERNAL_AUTH_URL']
+    MQTT_EXTERNAL_AUTH_URL = os.environ['MQTT_EXTERNAL_AUTH_URL']
 
     try:
-        response = requests.get(EXTERNAL_AUTH_URL,
+        response = requests.get(MQTT_EXTERNAL_AUTH_URL,
                                 headers={
                                     'Authorization': 'Bearer {}'.format(token),
                                     'Content-Type': 'application/json'
