@@ -16,11 +16,11 @@ def user_acl_cache_key(token): return user_cache_key(token) + ':acl'
 
 
 def userDetails(token: str) -> dict:
-    REIGN_AUTH_URL = os.environ['REIGN_AUTH_URL']
+    EXTERNAL_AUTH_URL = os.environ['EXTERNAL_AUTH_URL']
 
     try:
         response = requests.get(
-            REIGN_AUTH_URL,
+            EXTERNAL_AUTH_URL,
             headers={
                 'Authorization': 'Bearer {}'.format(token),
                 'Content-Type': 'application/json'
