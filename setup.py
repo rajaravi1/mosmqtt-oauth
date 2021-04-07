@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
@@ -12,7 +11,6 @@ Full documentation is available on `Github`_.
 '''
 
 install_requires = ['redis==3.5.3', 'requests==2.22.0']
-
 
 setup(
     name='mosmqtt-oauth',

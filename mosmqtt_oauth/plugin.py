@@ -11,20 +11,23 @@ logger.setLevel(logging.INFO)
 REDIS_CONN = None
 
 
-def user_cache_key(token): return 'mosq:' + token
-def user_acl_cache_key(token): return user_cache_key(token) + ':acl'
+def user_cache_key(token):
+    return 'mosq:' + token
+
+
+def user_acl_cache_key(token):
+    return user_cache_key(token) + ':acl'
 
 
 def userDetails(token: str) -> dict:
     EXTERNAL_AUTH_URL = os.environ['EXTERNAL_AUTH_URL']
 
     try:
-        response = requests.get(
-            EXTERNAL_AUTH_URL,
-            headers={
-                'Authorization': 'Bearer {}'.format(token),
-                'Content-Type': 'application/json'
-            })
+        response = requests.get(EXTERNAL_AUTH_URL,
+                                headers={
+                                    'Authorization': 'Bearer {}'.format(token),
+                                    'Content-Type': 'application/json'
+                                })
         response.raise_for_status()
     except requests.HTTPError as e:
         logger.exception(e)
@@ -41,7 +44,8 @@ def plugin_init(opts):
     REDIS_PASSWORD = os.environ['REDIS_PASSWORD']
     REDIS_PORT = os.environ.get('REDIS_PORT', 6379)
     REDIS_SSL = os.environ.get('REDIS_SSL') in {
-        '1', 'true', 'True', 'TRUE', None}
+        '1', 'true', 'True', 'TRUE', None
+    }
     REDIS_DB = os.environ.get('REDIS_DB', 0)
 
     global REDIS_CONN
@@ -71,7 +75,8 @@ def unpwd_check(username: str, password: str) -> bool:
     return True
 
 
-def acl_check(client_id: str, username: str, topic: str, access: str, payload) -> bool:
+def acl_check(client_id: str, username: str, topic: str, access: str,
+              payload) -> bool:
     import mosquitto_auth
     if username is None:
         logger.error('Authentication required for acl check')
@@ -87,13 +92,14 @@ def acl_check(client_id: str, username: str, topic: str, access: str, payload) -
 
         matches = False
         for allowedTopic in allowedTopics:
-            matches = mosquitto_auth.topic_matches_sub(
-                allowedTopic.decode(), topic)
+            matches = mosquitto_auth.topic_matches_sub(allowedTopic.decode(),
+                                                       topic)
             if matches:
                 break
         if matches is False:
             logger.info(
-                "User: %s requested topic: %s not allowed. Allowed Topics: %s", user, topic, allowedTopics)
+                "User: %s requested topic: %s not allowed. Allowed Topics: %s",
+                user, topic, allowedTopics)
 
     logger.info('ACL: user=%s topic=%s, matches = %s, payload = %r' %
                 (user, topic, matches, payload))
