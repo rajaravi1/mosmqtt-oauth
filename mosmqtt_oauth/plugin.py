@@ -8,6 +8,18 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+MOSQUITTO_LOG_DIR = "/var/log/mosquitto/"
+PLUGIN_LOG_FILE_NAME = "mosmqtt_oauth.log"
+PLUGIN_LOG_FILE = os.path.join(MOSQUITTO_LOG_DIR, PLUGIN_LOG_FILE_NAME)
+
+fh = logging.FileHandler(PLUGIN_LOG_FILE if os.path.exists(
+    MOSQUITTO_LOG_DIR) else PLUGIN_LOG_FILE_NAME)
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter(
+    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
 REDIS_CONN = None
 
 
